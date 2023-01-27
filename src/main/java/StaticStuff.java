@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class StaticStuff {
@@ -85,9 +84,10 @@ public class StaticStuff {
                 } else {
                     name = dataSplit[7].substring(1, dataSplit[7].length() - 1);
                 }
-                String streamerName = ProiectPOO.getInstance().getStreamerById(streamerId).getName();
-                Stream stream = new Stream(streamType, streamId, streamGenre, noOfStreams,
-                        streamerId, length, dateAdded, name, streamerName);
+                Stream stream = new Stream.Builder(streamType, streamId, streamGenre, length, name, streamerId)
+                        .noOfStreams(noOfStreams)
+                        .dateAdded(dateAdded)
+                        .build();
                 ProiectPOO.getInstance().getStreams().add(stream);
                 ProiectPOO.getInstance().getStreamerById(streamerId).getStreams().add(streamId);
             }

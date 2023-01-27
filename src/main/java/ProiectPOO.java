@@ -56,29 +56,50 @@ public class ProiectPOO {
     public void executeCommands() {
         for (String command : commands) {
             String[] commandSplit = command.split(" ");
+            Integer id = Integer.parseInt(commandSplit[0]);
             if (commandSplit[1].equals("LIST")) {
-                Integer id = Integer.parseInt(commandSplit[0]);
-                    Human human = getStreamerById(id);
-                    if (human == null) {
-                        human = getUserById(id);
-                    }
-                    ArrayList<Integer> streams = human.getStreams();
-                    int nr = 0;
-                    String print = "";
-                    for (Integer streamId : streams) {
-                        Stream stream = getStreamById(streamId);
-                        print = "["+stream.toString();
-                        if(nr < streams.size() - 1) {
-                            print += ",";
-                        } else {
-                            print += "]";
-                        }
-                        nr ++;
-                        }
-                System.out.println(print);
-                    }
-                }
+                this.listStreams(id);
+            } else if (commandSplit[1].equals("ADD")) {
+                this.addStreamToStreamer(id, commandSplit);
             }
+        }
+    }
+
+    public void listStreams(Integer id) {
+        Human human = getStreamerById(id);
+        if (human == null) {
+            human = getUserById(id);
+        }
+        ArrayList<Integer> streams = human.getStreams();
+        int nr = 0;
+        String print = "";
+        for (Integer streamId : streams) {
+            Stream stream = getStreamById(streamId);
+            print = "[" + stream.toString();
+            if (nr < streams.size() - 1) {
+                print += ",";
+            } else {
+                print += "]";
+            }
+            nr++;
+        }
+        System.out.println(print);
+    }
+
+    public void addStreamToStreamer(Integer id, String[] commandSplit) {
+        Streamer streamer = getStreamerById(id);
+        Integer streamType = Integer.parseInt(commandSplit[2]);
+        Integer streamId = Integer.parseInt(commandSplit[3]);
+        Integer streamGenre = Integer.parseInt(commandSplit[4]);
+        Long streamDuration = Long.parseLong(commandSplit[5]);
+        String name = commandSplit[6];
+        for (int i = 7; i < commandSplit.length; i++) {
+            name += " " + commandSplit[i];
+        }
+        streamer.getStreams().add(streamId);
+        Stream stream = new Stream.Builder(streamType, streamId, streamGenre, streamDuration, name, id).build();
+        ProiectPOO.getInstance().getStreams().add(stream);
+    }
 
     public Streamer getStreamerById(Integer id) {
         for (Streamer streamer : this.getStreamers()) {

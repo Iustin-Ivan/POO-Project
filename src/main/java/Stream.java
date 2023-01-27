@@ -12,19 +12,21 @@ public class Stream {
     private String name;
     private String streamerName;
 
-    public Stream(Integer streamType, Integer id, Integer streamGenre, Long noOfStreams,
-                  Integer streamerId, Long length, Long dateAdded, String name, String streamerName) {
-        this.streamType = streamType;
-        this.id = id;
-        this.streamGenre = streamGenre;
-        this.noOfStreams = noOfStreams;
-        this.streamerId = streamerId;
-        this.length = length;
-        this.dateAdded = dateAdded;
-        this.name = name;
-        this.streamerName = streamerName;
-    }
 
+    /*
+        public Stream(Integer streamType, Integer id, Integer streamGenre, Long noOfStreams,
+                      Integer streamerId, Long length, Long dateAdded, String name, String streamerName) {
+            this.streamType = streamType;
+            this.id = id;
+            this.streamGenre = streamGenre;
+            this.noOfStreams = noOfStreams;
+            this.streamerId = streamerId;
+            this.length = length;
+            this.dateAdded = dateAdded;
+            this.name = name;
+            this.streamerName = streamerName;
+        }
+    */
     public Integer getStreamType() {
         return streamType;
     }
@@ -97,10 +99,61 @@ public class Stream {
         } else {
             timeFormat = String.format("%02d:%02d:%02d", length / 3600, (length % 3600) / 60, length % 60);
         }
-        String date = new java.text.SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date (dateAdded*1000));
+        String date = new java.text.SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date(dateAdded * 1000));
         String s = "";
         s += "{\"id\":\"" + id + "\",\"name\":\"" + name + "\",\"streamerName\":\"" + streamerName +
                 "\",\"noOfListenings\":\"" + noOfStreams + "\",\"length\":\"" + timeFormat + "\",\"dateAdded\":\"" + date + "\"}";
         return s;
     }
-}
+
+    public static class Builder {
+        private Integer streamType;
+        private Integer id;
+        private Integer streamGenre;
+        private Long noOfStreams = 0L;
+        private Integer streamerId;
+        private Long length;
+        private Long dateAdded = 1673568000L;
+        private String name;
+        private String streamerName;
+
+
+        public Builder(Integer streamType, Integer streamId, Integer streamGenre, Long length,
+                       String name, Integer streamerId) {
+            this.id = streamId;
+            this.streamType = streamType;
+            this.streamGenre = streamGenre;
+            this.length = length;
+            this.name = name;
+            this.streamerId = streamerId;
+            Human h = ProiectPOO.getInstance().getStreamerById(streamerId);
+            this.streamerName = h.getName();
+        }
+
+        public Builder noOfStreams(Long noOfStreams) {
+            this.noOfStreams = noOfStreams;
+            return this;
+        }
+
+        public Builder dateAdded(Long dateAdded) {
+            this.dateAdded = dateAdded;
+            return this;
+        }
+
+        public Stream build() {
+            return new Stream(this);
+        }
+    }
+
+        private Stream(Builder builder) {
+                this.streamType = builder.streamType;
+                this.id = builder.id;
+                this.streamGenre = builder.streamGenre;
+                this.noOfStreams = builder.noOfStreams;
+                this.streamerId = builder.streamerId;
+                this.length = builder.length;
+                this.dateAdded = builder.dateAdded;
+                this.name = builder.name;
+                this.streamerName = builder.streamerName;
+            }
+    }
