@@ -11,22 +11,6 @@ public class Stream {
     private Long dateAdded;
     private String name;
     private String streamerName;
-
-
-    /*
-        public Stream(Integer streamType, Integer id, Integer streamGenre, Long noOfStreams,
-                      Integer streamerId, Long length, Long dateAdded, String name, String streamerName) {
-            this.streamType = streamType;
-            this.id = id;
-            this.streamGenre = streamGenre;
-            this.noOfStreams = noOfStreams;
-            this.streamerId = streamerId;
-            this.length = length;
-            this.dateAdded = dateAdded;
-            this.name = name;
-            this.streamerName = streamerName;
-        }
-    */
     public Integer getStreamType() {
         return streamType;
     }
