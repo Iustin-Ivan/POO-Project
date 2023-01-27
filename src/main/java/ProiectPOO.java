@@ -71,15 +71,15 @@ public class ProiectPOO {
             human = getUserById(id);
         }
         ArrayList<Integer> streams = human.getStreams();
-        String print = "";
+        StringBuilder print = new StringBuilder();
+        print.append("[");
         for (int i = 0; i < streams.size(); i++) {
             Stream stream = getStreamById(streams.get(i));
-            print += "[";
-            print += stream.toString();
+            print.append(stream.toString());
             if (i < streams.size() - 1) {
-                print += ",";
+                print.append(",");
             } else {
-                print += "]";
+                print.append("]");
             }
         }
         System.out.println(print);
