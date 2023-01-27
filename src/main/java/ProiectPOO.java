@@ -63,11 +63,19 @@ public class ProiectPOO {
                         human = getUserById(id);
                     }
                     ArrayList<Integer> streams = human.getStreams();
+                    int nr = 0;
+                    String print = "";
                     for (Integer streamId : streams) {
                         Stream stream = getStreamById(streamId);
-                        String print = "["+stream.toString()+"]";
-                        System.out.println(print);
+                        print = "["+stream.toString();
+                        if(nr < streams.size() - 1) {
+                            print += ",";
+                        } else {
+                            print += "]";
                         }
+                        nr ++;
+                        }
+                System.out.println(print);
                     }
                 }
             }
