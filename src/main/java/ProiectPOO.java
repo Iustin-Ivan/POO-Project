@@ -71,19 +71,25 @@ public class ProiectPOO {
             human = getUserById(id);
         }
         ArrayList<Integer> streams = human.getStreams();
-        int nr = 0;
         String print = "";
-        for (Integer streamId : streams) {
-            Stream stream = getStreamById(streamId);
-            print = "[" + stream.toString();
-            if (nr < streams.size() - 1) {
+        for (int i = 0; i < streams.size(); i++) {
+            Stream stream = getStreamById(streams.get(i));
+            print += "[";
+            print += stream.toString();
+            if (i < streams.size() - 1) {
                 print += ",";
             } else {
                 print += "]";
             }
-            nr++;
         }
         System.out.println(print);
+        try {
+            FileWriter fw = new FileWriter("output.txt", true);
+            fw.write(print+"\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addStreamToStreamer(Integer id, String[] commandSplit) {
