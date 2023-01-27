@@ -63,6 +63,8 @@ public class ProiectPOO {
                 this.addStreamToStreamer(id, commandSplit);
             } else if (commandSplit[1].equals("DELETE")) {
                 this.deleteStream(id, commandSplit);
+            } else if (commandSplit[1].equals("LISTEN")) {
+                this.listenStream(id, commandSplit);
             }
         }
     }
@@ -115,6 +117,14 @@ public class ProiectPOO {
         streamer.getStreams().remove(streamId);
         Stream stream = getStreamById(streamId);
         ProiectPOO.getInstance().getStreams().remove(stream);
+    }
+
+    public void listenStream(Integer id, String[] commandSplit) {
+        User user = getUserById(id);
+        Integer streamId = Integer.parseInt(commandSplit[2]);
+        Stream stream = getStreamById(streamId);
+        user.getStreams().add(streamId);
+        stream.setNoOfStreams(stream.getNoOfStreams() + 1);
     }
 
     public Streamer getStreamerById(Integer id) {
