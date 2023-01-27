@@ -61,6 +61,8 @@ public class ProiectPOO {
                 this.listStreams(id);
             } else if (commandSplit[1].equals("ADD")) {
                 this.addStreamToStreamer(id, commandSplit);
+            } else if (commandSplit[1].equals("DELETE")) {
+                this.deleteStream(id, commandSplit);
             }
         }
     }
@@ -105,6 +107,14 @@ public class ProiectPOO {
         streamer.getStreams().add(streamId);
         Stream stream = new Stream.Builder(streamType, streamId, streamGenre, streamDuration, name, id).build();
         ProiectPOO.getInstance().getStreams().add(stream);
+    }
+
+    public void deleteStream(Integer id, String[] commandSplit) {
+        Streamer streamer = getStreamerById(id);
+        Integer streamId = Integer.parseInt(commandSplit[2]);
+        streamer.getStreams().remove(streamId);
+        Stream stream = getStreamById(streamId);
+        ProiectPOO.getInstance().getStreams().remove(stream);
     }
 
     public Streamer getStreamerById(Integer id) {
