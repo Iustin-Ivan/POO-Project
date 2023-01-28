@@ -1,8 +1,5 @@
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class ProiectPOO {
@@ -95,13 +92,6 @@ public class ProiectPOO {
             }
         }
         System.out.println(print);
-        try {
-            FileWriter fw = new FileWriter("output.txt", true);
-            fw.write(print+"\n");
-            fw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void addStreamToStreamer(Integer id, String[] commandSplit) {
@@ -223,13 +213,6 @@ public class ProiectPOO {
             }
         }
         System.out.println(print);
-        try {
-            FileWriter fw = new FileWriter("output.txt", true);
-            fw.write(print+"\n");
-            fw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public Streamer getStreamerById(Integer id) {
