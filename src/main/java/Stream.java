@@ -83,7 +83,10 @@ public class Stream {
         } else {
             timeFormat = String.format("%02d:%02d:%02d", length / 3600, (length % 3600) / 60, length % 60);
         }
-        String date = new java.text.SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date(dateAdded * 1000));
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String date = sdf.format(new java.util.Date(dateAdded * 1000));
+
         String s = "";
         s += "{\"id\":\"" + id + "\",\"name\":\"" + name + "\",\"streamerName\":\"" + streamerName +
                 "\",\"noOfListenings\":\"" + noOfStreams + "\",\"length\":\"" + timeFormat + "\",\"dateAdded\":\"" + date + "\"}";

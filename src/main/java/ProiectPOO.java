@@ -204,6 +204,13 @@ public class ProiectPOO {
             System.out.println("Nothing to read here");
         } else {
             ProiectPOO project = getInstance();
+            try {
+             FileWriter fw = new FileWriter("output.txt", true);
+                fw.write(args[0]+" "+args[1]+" "+args[2]+" "+args[3]);
+                fw.close();
+            }catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             StaticStuff.createLists(args);
             project.executeCommands();
         }
