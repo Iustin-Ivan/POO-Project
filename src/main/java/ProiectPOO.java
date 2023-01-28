@@ -1,6 +1,7 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ProiectPOO {
@@ -65,6 +66,9 @@ public class ProiectPOO {
                 this.deleteStream(id, commandSplit);
             } else if (commandSplit[1].equals("LISTEN")) {
                 this.listenStream(id, commandSplit);
+            } else if (commandSplit[1].equals("RECOMMEND")) {
+                String typeOfStream = commandSplit[2];
+                this.recommendStream(id, typeOfStream);
             }
         }
     }
@@ -125,6 +129,47 @@ public class ProiectPOO {
         Stream stream = getStreamById(streamId);
         user.getStreams().add(streamId);
         stream.setNoOfStreams(stream.getNoOfStreams() + 1);
+    }
+
+    public void recommendStream(Integer id, String typeOfStream) {
+        User user = getUserById(id);
+        ArrayList<Integer> streams = user.getStreams();
+        HashSet<Streamer> streamersListened = new HashSet<>();
+        for (Integer streamId : streams) {
+            Stream stream = getStreamById(streamId);
+            Streamer streamer = getStreamerById(stream.getStreamerId());
+            streamersListened.add(streamer);
+        }
+        HashSet<Stream> streamsNotListened = new HashSet<>();
+        for (Streamer streamer : streamersListened) {
+            ArrayList<Integer> streamerStreams = streamer.getStreams();
+            for (Integer streamId : streamerStreams) {
+                Stream stream = getStreamById(streamId);
+                if (!streams.contains(streamId)) {
+                    streamsNotListened.add(stream);
+                }
+            }
+        }
+        Context context = new Context();
+        if (typeOfStream.equals("SONG")) {
+            context.setStrategy(new SongStrategy());
+        } else if (typeOfStream.equals("PODCAST")) {
+            context.setStrategy(new PodcastStrategy());
+        } else if (typeOfStream.equals("AUDIOBOOK")) {
+            context.setStrategy(new AudioBookStrategy());
+        }
+        ArrayList<Stream> finalStreams = context.executeStrategy(streamsNotListened);
+        StringBuilder print = new StringBuilder();
+        print.append("[");
+        for (int i = 0; i < finalStreams.size(); i++) {
+            print.append(finalStreams.get(i).toString());
+            if (i < finalStreams.size() - 1) {
+                print.append(",");
+            } else {
+                print.append("]");
+            }
+        }
+        System.out.println(print);
     }
 
     public Streamer getStreamerById(Integer id) {
