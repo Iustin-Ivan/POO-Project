@@ -1,8 +1,9 @@
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class ProiectPOO {
     private static ProiectPOO instance;
@@ -69,6 +70,9 @@ public class ProiectPOO {
             } else if (commandSplit[1].equals("RECOMMEND")) {
                 String typeOfStream = commandSplit[2];
                 this.recommendStream(id, typeOfStream);
+            } else if (commandSplit[1].equals("SURPRISE")) {
+                String typeOfStream = commandSplit[2];
+                this.surpriseStream(id, typeOfStream);
             }
         }
     }
@@ -159,17 +163,73 @@ public class ProiectPOO {
             context.setStrategy(new AudioBookStrategy());
         }
         ArrayList<Stream> finalStreams = context.executeStrategy(streamsNotListened);
+        DynamicComparatorStreamuri d = new DynamicComparatorStreamuri();
+        d.setCompareBy(0);
+        Collections.sort(finalStreams, d);
         StringBuilder print = new StringBuilder();
         print.append("[");
-        for (int i = 0; i < finalStreams.size(); i++) {
+        int nr = min(5, finalStreams.size());
+        for (int i = 0; i < nr; i++) {
             print.append(finalStreams.get(i).toString());
-            if (i < finalStreams.size() - 1) {
+            if (i < nr - 1) {
                 print.append(",");
             } else {
                 print.append("]");
             }
         }
         System.out.println(print);
+    }
+
+    public void surpriseStream(Integer id, String typeOfStream) {
+        User user = getUserById(id);
+        ArrayList<Integer> streams = user.getStreams();
+        HashSet<Streamer> streamersListened = new HashSet<>();
+        for (Integer streamId : streams) {
+            Stream stream = getStreamById(streamId);
+            Streamer streamer = getStreamerById(stream.getStreamerId());
+            streamersListened.add(streamer);
+        }
+        HashSet<Stream> streamsNotListened = new HashSet<>();
+        for (Streamer streamer : this.getStreamers()) {
+            if (!streamersListened.contains(streamer)) {
+                ArrayList<Integer> streamerStreams = streamer.getStreams();
+                for (Integer streamId : streamerStreams) {
+                    Stream stream = getStreamById(streamId);
+                    streamsNotListened.add(stream);
+                }
+            }
+        }
+        Context context = new Context();
+        if (typeOfStream.equals("SONG")) {
+            context.setStrategy(new SongStrategy());
+        } else if (typeOfStream.equals("PODCAST")) {
+            context.setStrategy(new PodcastStrategy());
+        } else if (typeOfStream.equals("AUDIOBOOK")) {
+            context.setStrategy(new AudioBookStrategy());
+        }
+        ArrayList<Stream> finalStreams = context.executeStrategy(streamsNotListened);
+        DynamicComparatorStreamuri d = new DynamicComparatorStreamuri();
+        d.setCompareBy(1);
+        Collections.sort(finalStreams, d);
+        StringBuilder print = new StringBuilder();
+        print.append("[");
+        int nr = min(3, finalStreams.size());
+        for (int i = 0; i < nr; i++) {
+            print.append(finalStreams.get(i).toString());
+            if (i < nr - 1) {
+                print.append(",");
+            } else {
+                print.append("]");
+            }
+        }
+        System.out.println(print);
+        try {
+            FileWriter fw = new FileWriter("output.txt", true);
+            fw.write(print+"\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Streamer getStreamerById(Integer id) {
