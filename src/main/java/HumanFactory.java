@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class HumanFactory {
     public Human getHuman(String humanType, Integer id, String name, Integer streamerType, ArrayList<Integer> streams){
