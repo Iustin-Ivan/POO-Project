@@ -246,7 +246,8 @@ public class ProiectPOO {
         if(args == null) {
             System.out.println("Nothing to read here");
         } else {
-            ProiectPOO project = getInstance();
+            ProiectPOO.instance = new ProiectPOO();
+            ProiectPOO project = ProiectPOO.getInstance();
             StaticStuff.createLists(args);
             project.executeCommands();
         }
